@@ -2,13 +2,25 @@ import tkinter as tk
 from tkinter import messagebox
 import customtkinter as ctk
 
-estoque = {}
+estoque = {
+    "arroz": {"Quantidade": 50, "Preço": 10.99, "Categoria": "Grãos"},
+    "Feijão": {"Quantidade": 40, "Preço": 8.50, "Categoria": "Grãos"},
+    "Macarrão": {"Quantidade": 30, "Preço": 5.75, "Categoria": "Massas"},
+    "Café": {"Quantidade": 20, "Preço": 15.25, "Categoria": "Bebidas"},
+    "Leite": {"Quantidade": 25, "Preço": 3.99, "Categoria": "Laticínios"},
+    "Óleo de Soja": {"Quantidade": 15, "Preço": 6.99, "Categoria": "Óleos"},
+
+}
+
 
 def adicionar_produto():
     nome = nome_entry.get()
     quantidade = int(quantidade_entry.get())
     preco = float(preco_entry.get())
     categoria = categoria_entry.get()
+
+    for i in estoque:
+        nome = nome.capitalize()
     
     if nome not in estoque:
         estoque[nome] = {"Quantidade": quantidade, "Preço": preco, "Categoria": categoria}
