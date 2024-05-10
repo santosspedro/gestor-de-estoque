@@ -2,23 +2,41 @@ import tkinter as tk
 from tkinter import messagebox
 import customtkinter as ctk
 
-estoque = {}
+#Pré lista
+estoque = {
+    "Arroz": {"Quantidade": 50, "Preço": 10.99, "Categoria": "Grãos"},
+    "Feijão": {"Quantidade": 40, "Preço": 8.50, "Categoria": "Grãos"},
+    "Macarrão": {"Quantidade": 30, "Preço": 5.75, "Categoria": "Massas"},
+    "Café": {"Quantidade": 20, "Preço": 15.25, "Categoria": "Bebidas"},
+    "Leite": {"Quantidade": 25, "Preço": 3.99, "Categoria": "Laticínios"},
+    "Óleo de Soja": {"Quantidade": 15, "Preço": 6.99, "Categoria": "Óleos"},
 
+}
+
+#Funcão de adicionar produto
 def adicionar_produto():
     nome = nome_entry.get()
     quantidade = int(quantidade_entry.get())
     preco = float(preco_entry.get())
     categoria = categoria_entry.get()
-    
+
+    #Repeticão para colocar primeira letra em maiusculo
+    for i in estoque:
+        nome = nome.capitalize()
+        categoria = categoria.capitalize()
+         
     if nome not in estoque:
         estoque[nome] = {"Quantidade": quantidade, "Preço": preco, "Categoria": categoria}
         messagebox.showinfo("Sucesso", f"Produto {nome} adicionado com sucesso!")
     else:
         messagebox.showerror("Erro", f"O produto {nome} já existe no estoque!")
 
+#função de atualizar o estoque
 def atualizar_estoque():
     nome = nome_entry.get()
     quantidade = int(quantidade_entry.get())
+    for i in estoque:
+        nome = nome.capitalize()
     
     if nome in estoque:
         estoque[nome]["Quantidade"] += quantidade
@@ -26,6 +44,7 @@ def atualizar_estoque():
     else:
         messagebox.showerror("Erro", f"Produto {nome} não encontrado no estoque.")
 
+#Função de mostrar os produtos
 def listar_produtos():
     if estoque:
         produtos = "\n".join([f"{produto}: {info['Quantidade']} unidades, R$ {info['Preço']}, {info['Categoria']}" for produto, info in estoque.items()])
@@ -33,35 +52,50 @@ def listar_produtos():
     else:
         messagebox.showinfo("Estoque Vazio", "O estoque está vazio.")
 
+#Função de buscar algum produto existente
 def buscar_produto():
     nome = nome_entry.get()
+    for i in estoque:
+        nome = nome.capitalize()
     if nome in estoque:
         info = estoque[nome]
         messagebox.showinfo("Informações do Produto", f"Informações sobre o produto {nome}:\nQuantidade: {info['Quantidade']} unidades\nPreço: R$ {info['Preço']}\nCategoria: {info['Categoria']}")
     else:
         messagebox.showerror("Produto Não Encontrado", f"Produto {nome} não encontrado no estoque.")
 
+#Função de remover algum produto existente
 def remover_produto():
     nome = nome_entry.get()
+    for i in estoque:
+        nome = nome.capitalize()
     if nome in estoque:
         del estoque[nome]
         messagebox.showinfo("Produto Removido", f"Produto {nome} removido do estoque.")
     else:
         messagebox.showerror("Produto Não Encontrado", f"Produto {nome} não encontrado no estoque.")
 
+#função de deletar todo o estoque
+def deletar_todo_estoque():
+    global estoque
+    estoque.clear()
+    messagebox.showinfo("Estoque Apagado", "O estoque foi apagado.")
+
+
+#Função de listar produtos quase esgotados
 def produtos_em_baixa_quantidade():
-    baixos = [produto for produto, info in estoque.items() if info['Quantidade'] <= 5]
+    baixos = [produto for produto, info in estoque.items() if info['Quantidade'] <= 10]
     if baixos:
         messagebox.showinfo("Produtos em Baixa Quantidade", f"Produtos com quantidade baixa:\n{', '.join(baixos)}")
     else:
         messagebox.showinfo("Produtos em Baixa Quantidade", "Todos os produtos estão em quantidade satisfatória.")
 
+#Função principal da janela
 def main():
     global nome_entry, quantidade_entry, preco_entry, categoria_entry
     root = ctk.CTk()
     root.title("Gestor de Estoque")
 
-    # Definição dos Widgets
+    # Widgets
     nome_label = ctk.CTkLabel(root, text="Nome:")
     nome_entry = ctk.CTkEntry(root)
 
@@ -80,8 +114,9 @@ def main():
     buscar_button = ctk.CTkButton(root, text="Buscar Produto", command=buscar_produto)
     remover_button = ctk.CTkButton(root, text="Remover Produto", command=remover_produto)
     baixa_quantidade_button = ctk.CTkButton(root, text="Produtos em Baixa Quantidade", command=produtos_em_baixa_quantidade)
+    deletar_button = ctk.CTkButton(root, text="Deletar Estoque", command=deletar_todo_estoque)
 
-    # Empacotamento dos Widgets
+    # Empacotamento dos widgets
     nome_label.pack()
     nome_entry.pack()
 
@@ -100,6 +135,7 @@ def main():
     buscar_button.pack(fill="x", pady=5)
     remover_button.pack(fill="x", pady=5)
     baixa_quantidade_button.pack(fill="x", pady=5)
+    deletar_button.pack(fill="x", pady=5)
 
     root.mainloop()
 
