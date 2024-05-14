@@ -1,3 +1,6 @@
+#Instale a bibblioteca customtk antes de apresentar
+# pip install customtk
+
 import tkinter as tk
 from tkinter import messagebox
 import customtkinter as ctk
